@@ -13,3 +13,120 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+enum MovementType {
+  PUTAWAY
+  PICK
+  MOVE
+  ADJUSTMENT
+}
+
+enum TaskStatus {
+  PENDING
+  DONE
+}
+
+model Warehouse {
+  id        String   @id @default(cuid())
+  name      String
+  createdAt DateTime @default(now())
+
+  aisles Aisle[]
+}
+
+model Aisle {
+  id          String @id @default(cuid())
+  warehouseId String
+  code        String
+
+  warehouse Warehouse @relation(fields: [warehouseId], references: [id])
+  racks     Rack[]
+}
+
+model Rack {
+  id      String @id @default(cuid())
+  aisleId String
+  code    String
+
+  aisle Aisle @relation(fields: [aisleId], references: [id])
+  bins  Bin[]
+}
+
+model Bin {
+  id            String    @id @default(cuid())
+  rackId        String
+  code          String    @unique
+  lastAuditedAt DateTime?
+  createdAt     DateTime  @default(now())
+
+  rack           Rack            @relation(fields: [rackId], references: [id])
+  pallets        Pallet[]
+  movements      Movement[]
+  scoreSnapshots ScoreSnapshot[]
+  auditTasks     AuditTask[]
+}
+
+model Product {
+  id   String @id @default(cuid())
+  sku  String @unique
+  name String
+
+  pallets Pallet[]
+}
+
+model Pallet {
+  id        String   @id @default(cuid())
+  productId String
+  binId     String
+  quantity  Int
+  createdAt DateTime @default(now())
+
+  product   Product    @relation(fields: [productId], references: [id])
+  bin       Bin        @relation(fields: [binId], references: [id])
+  movements Movement[]
+}
+
+model Movement {
+  id         String       @id @default(cuid())
+  binId      String
+  palletId   String?
+  type       MovementType
+  quantity   Int?
+  occurredAt DateTime
+
+  bin    Bin     @relation(fields: [binId], references: [id])
+  pallet Pallet? @relation(fields: [palletId], references: [id])
+}
+
+model ScoreSnapshot {
+  id           String   @id @default(cuid())
+  binId        String
+  score        Float
+  breakdown    Json
+  calculatedAt DateTime @default(now())
+
+  bin Bin @relation(fields: [binId], references: [id])
+}
+
+model AuditPlan {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  topN      Int
+
+  auditTasks AuditTask[]
+}
+
+model AuditTask {
+  id               String     @id @default(cuid())
+  auditPlanId      String
+  binId            String
+  status           TaskStatus @default(PENDING)
+  createdAt        DateTime   @default(now())
+  expectedQuantity Int?
+  countedQuantity  Int?
+  passed           Boolean?
+  countedAt        DateTime?
+
+  auditPlan AuditPlan @relation(fields: [auditPlanId], references: [id])
+  bin       Bin       @relation(fields: [binId], references: [id])
+}
