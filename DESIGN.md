@@ -40,6 +40,7 @@ synchronously (no queues/websockets needed for this MVP scope).
 | 10 | **Bin capacity** | No pallet limit per bin — not required by the MVP scope. |
 | 11 | **Count/Task relationship** | Count fields (`expectedQuantity`, `countedQuantity`, `passed`, `countedAt`) live directly on `AuditTask` instead of a separate `CountRecord` table, since the relationship is strictly 1:1. |
 | 12 | **Counting without a plan** | Counting is only allowed against an existing `PENDING` AuditTask. Free-form counting (no prior task) is out of scope for this MVP, left as a possible future extension. |
+| 13 | **Single-bin recompute normalization** | `POST /scoring/recompute/:binId` recalculates raw factors for ALL bins to determine min/max for normalization, but only persists a new `ScoreSnapshot` for the audited bin. The other 29 bins' snapshots are not refreshed, even though the global min/max technically shifted slightly. This is an accepted MVP simplification — full-recompute-on-every-count would be statistically purer but adds negligible value at this scale (30 bins). |
 
 ---
 

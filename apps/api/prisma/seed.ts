@@ -1,4 +1,4 @@
-import { PrismaClient, MovementType } from "../generated/prisma/client";
+import { PrismaClient, MovementType } from "../src/generated/prisma/client";
 
 const prisma = new PrismaClient();
 
