@@ -11,11 +11,17 @@ const RISK_STYLES: Record<RiskLevel, string> = {
   high: "bg-risk-high",
 };
 
-const RISK_LABELS: Record<RiskLevel, string> = {
-  low: "Riesgo bajo",
-  medium: "Riesgo medio",
-  high: "Riesgo alto",
-};
+const RISK_LEGEND: { level: RiskLevel; label: string; range: string }[] = [
+  { level: "low", label: "Riesgo bajo", range: "0-39" },
+  { level: "medium", label: "Riesgo medio", range: "40-64" },
+  { level: "high", label: "Riesgo alto", range: "65-100" },
+];
+
+function scoreForRisk(risk: RiskLevel, seed: number): number {
+  const [min, max] =
+    risk === "low" ? [10, 38] : risk === "medium" ? [40, 64] : [65, 96];
+  return min + (seed % (max - min));
+}
 
 // Placeholder data only — real bins/scores arrive via fetch in a later phase.
 const PLACEHOLDER_BINS = Array.from({ length: 30 }, (_, i) => {
@@ -23,29 +29,63 @@ const PLACEHOLDER_BINS = Array.from({ length: 30 }, (_, i) => {
   return {
     code: `A${(i % 6) + 1}-R${Math.floor(i / 6) + 1}-B${String((i % 4) + 1).padStart(2, "0")}`,
     risk,
+    score: scoreForRisk(risk, i * 7 + 3),
   };
 });
 
 export default function HeatmapPage() {
   const [selectedBin, setSelectedBin] = useState<string | null>(null);
 
+  const legendCounts = RISK_LEGEND.map((entry) => ({
+    ...entry,
+    count: PLACEHOLDER_BINS.filter((bin) => bin.risk === entry.level).length,
+  }));
+
   return (
     <div className="flex flex-col gap-6">
-      <div>
-        <h1 className="text-xl font-semibold text-warm-900 sm:text-2xl">
-          Heatmap del almacén
-        </h1>
-        <p className="mt-1 text-sm text-warm-600">
-          Vista placeholder — la carga real de bins y scores llega en una fase
-          posterior.
-        </p>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+          <p className="font-mono text-xs uppercase tracking-widest text-warm-500">
+            Dashboard
+          </p>
+          <h1 className="mt-1 text-2xl font-bold text-warm-900 sm:text-3xl">
+            Heatmap del almacén
+          </h1>
+          <p className="mt-2 max-w-xl text-sm text-warm-600">
+            Los bins con mayor riesgo de discrepancia aparecen en terracota.
+            Toca un bin para ver su score y por qué lo tiene.
+          </p>
+        </div>
+
+        <div className="flex items-center gap-3">
+          <label className="flex items-center gap-2 text-sm text-warm-600">
+            Top N
+            <input
+              type="number"
+              defaultValue={10}
+              className="w-16 rounded-lg border border-warm-200 bg-warm-50 px-2 py-1.5 text-center font-mono text-warm-900"
+            />
+          </label>
+          <button className="whitespace-nowrap rounded-lg bg-warm-900 px-4 py-2 text-sm font-medium text-warm-50 transition hover:bg-warm-800">
+            Generate Audit Plan
+          </button>
+        </div>
       </div>
 
-      <div className="flex flex-wrap gap-4 text-sm text-warm-700">
-        {(Object.keys(RISK_LABELS) as RiskLevel[]).map((risk) => (
-          <div key={risk} className="flex items-center gap-2">
-            <span className={`h-3 w-3 rounded-sm ${RISK_STYLES[risk]}`} />
-            {RISK_LABELS[risk]}
+      <div className="flex flex-wrap items-center gap-x-6 gap-y-3 rounded-xl border border-warm-200 bg-warm-50 px-5 py-3">
+        <span className="font-mono text-xs uppercase tracking-wide text-warm-500">
+          Risk score
+        </span>
+        {legendCounts.map((entry) => (
+          <div key={entry.level} className="flex items-center gap-2 text-sm">
+            <span
+              className={`h-3 w-3 rounded-sm ${RISK_STYLES[entry.level]}`}
+            />
+            <span className="text-warm-700">{entry.label}</span>
+            <span className="text-warm-400">{entry.range}</span>
+            <span className="rounded-full bg-warm-100 px-2 py-0.5 text-xs font-medium text-warm-600">
+              {entry.count}
+            </span>
           </div>
         ))}
       </div>
@@ -56,9 +96,17 @@ export default function HeatmapPage() {
             key={bin.code}
             onClick={() => setSelectedBin(bin.code)}
             title={bin.code}
-            className={`aspect-square rounded-md text-[10px] font-medium text-warm-900/70 transition hover:opacity-80 hover:ring-2 hover:ring-warm-400 sm:text-xs ${RISK_STYLES[bin.risk]}`}
+            className={`flex aspect-square flex-col justify-between rounded-xl p-2 text-left transition hover:opacity-90 hover:ring-2 hover:ring-warm-900/20 sm:p-3 ${RISK_STYLES[bin.risk]}`}
           >
-            {bin.code}
+            <span className="font-mono text-[10px] font-medium text-warm-900/70 sm:text-xs">
+              {bin.code}
+            </span>
+            <span className="font-mono text-lg font-bold text-warm-900 sm:text-2xl">
+              {bin.score}
+              <span className="text-xs font-normal text-warm-900/50">
+                /100
+              </span>
+            </span>
           </button>
         ))}
       </div>

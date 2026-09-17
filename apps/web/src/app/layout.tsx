@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import Link from "next/link";
+import { NavTabs } from "@/components/NavTabs";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -18,36 +18,41 @@ export const metadata: Metadata = {
   description: "Prioriza qué bins auditar primero según su score de riesgo.",
 };
 
-const NAV_LINKS = [
-  { href: "/", label: "Heatmap" },
-  { href: "/audit-plans", label: "Audit Plans" },
-  { href: "/count", label: "Count" },
-];
-
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
       <body>
         <header className="border-b border-warm-200 bg-warm-50">
-          <nav className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-6 gap-y-2 px-4 py-3 sm:px-6">
-            <span className="text-sm font-semibold text-warm-900">
-              Smart Cycle Count
-            </span>
-            <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
-              {NAV_LINKS.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className="text-warm-600 transition hover:text-warm-900"
-                >
-                  {link.label}
-                </Link>
-              ))}
+          <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-4 py-3 sm:px-6">
+            <div className="flex items-center gap-3">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-warm-900 font-mono text-sm font-semibold text-warm-50">
+                SC
+              </div>
+              <div>
+                <p className="text-sm font-semibold leading-tight text-warm-900">
+                  Smart Cycle Count
+                </p>
+                <p className="text-xs leading-tight text-warm-500">
+                  Warehouse A · 30 bins
+                </p>
+              </div>
             </div>
-          </nav>
+
+            <NavTabs />
+
+            <div className="flex items-center gap-3">
+              <span className="hidden font-mono text-xs text-warm-400 sm:inline">
+                recompute hace 12 min
+              </span>
+              <button className="flex items-center gap-2 whitespace-nowrap rounded-lg bg-warm-900 px-4 py-2 text-sm font-medium text-warm-50 transition hover:bg-warm-800">
+                <span className="h-1.5 w-1.5 rounded-full bg-risk-low" />
+                Recompute Scores
+              </button>
+            </div>
+          </div>
         </header>
 
-        <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-6 sm:px-6">
+        <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-6 sm:px-6">
           {children}
         </main>
       </body>

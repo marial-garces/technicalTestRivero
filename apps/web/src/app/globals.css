@@ -7,7 +7,7 @@
   --color-risk-high: #d97757; /* terracotta / coral, deliberately not pure red */
 
   /* Warm neutrals for backgrounds and text — avoid pure white/black */
-  --color-warm-50: #faf9f6;
+  --color-warm-50: #faf9f5;
   --color-warm-100: #f2efe9;
   --color-warm-200: #e6e1d7;
   --color-warm-300: #d3cbbb;
@@ -17,6 +17,10 @@
   --color-warm-700: #534a3d;
   --color-warm-800: #3b342b;
   --color-warm-900: #29241d;
+
+  /* Data-forward mono for codes/scores/counters, sans for everything else */
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, "SFMono-Regular", monospace;
 }
 
 :root {
@@ -51,7 +55,7 @@ body {
   flex-direction: column;
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

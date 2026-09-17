@@ -41,11 +41,13 @@ export function Drawer({ open, onClose, title, children }: DrawerProps) {
       <div
         role="dialog"
         aria-modal="true"
-        className="relative flex max-h-[85vh] w-full flex-col overflow-y-auto rounded-t-2xl bg-warm-50 p-5 shadow-xl sm:h-full sm:max-h-none sm:w-[420px] sm:rounded-none sm:rounded-l-2xl md:w-[480px]"
+        className="relative flex max-h-[85vh] w-full flex-col overflow-y-auto rounded-t-2xl border-warm-200 bg-warm-50 p-5 shadow-xl sm:h-full sm:max-h-none sm:w-[420px] sm:rounded-none sm:rounded-l-2xl sm:border-l md:w-[480px]"
       >
-        <div className="mb-4 flex items-center justify-between gap-4">
+        <div className="mb-4 flex items-center justify-between gap-4 border-b border-warm-200 pb-4">
           {title ? (
-            <h2 className="text-lg font-semibold text-warm-900">{title}</h2>
+            <h2 className="font-mono text-lg font-semibold text-warm-900">
+              {title}
+            </h2>
           ) : (
             <span />
           )}
