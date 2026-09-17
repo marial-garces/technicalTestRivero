@@ -1,23 +1,48 @@
+@import "tailwindcss";
+
+@theme {
+  /* Risk heatmap palette — muted, non-alarming tones */
+  --color-risk-low: #8fbc94; /* sage green */
+  --color-risk-medium: #e8c468; /* amber / mustard */
+  --color-risk-high: #d97757; /* terracotta / coral, deliberately not pure red */
+
+  /* Warm neutrals for backgrounds and text — avoid pure white/black */
+  --color-warm-50: #faf9f6;
+  --color-warm-100: #f2efe9;
+  --color-warm-200: #e6e1d7;
+  --color-warm-300: #d3cbbb;
+  --color-warm-400: #b3a996;
+  --color-warm-500: #8f8471;
+  --color-warm-600: #6e6455;
+  --color-warm-700: #534a3d;
+  --color-warm-800: #3b342b;
+  --color-warm-900: #29241d;
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: var(--color-warm-50);
+  --foreground: var(--color-warm-900);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: var(--color-warm-900);
+    --foreground: var(--color-warm-50);
   }
-}
 
-html {
-  height: 100%;
+  html {
+    color-scheme: dark;
+  }
 }
 
 html,
 body {
   max-width: 100vw;
   overflow-x: hidden;
+}
+
+html {
+  height: 100%;
 }
 
 body {
@@ -31,19 +56,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-}
-
 a {
   color: inherit;
   text-decoration: none;
-}
-
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
 }
