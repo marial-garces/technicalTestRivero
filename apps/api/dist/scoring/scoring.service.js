@@ -24,11 +24,11 @@ let ScoringService = class ScoringService {
     constructor(prisma) {
         this.prisma = prisma;
     }
-    async collectRawFactors() {
-        const bins = await this.prisma.bin.findMany({
+    async collectRawFactors(client) {
+        const bins = await client.bin.findMany({
             select: { id: true, lastAuditedAt: true },
         });
-        const movementCounts = await this.prisma.movement.groupBy({
+        const movementCounts = await client.movement.groupBy({
             by: ['binId', 'type'],
             _count: { _all: true },
         });
@@ -97,11 +97,11 @@ let ScoringService = class ScoringService {
             return { binId: factors.binId, score, breakdown };
         });
     }
-    async recomputeAll() {
-        const rawFactors = await this.collectRawFactors();
+    async recomputeAll(client = this.prisma) {
+        const rawFactors = await this.collectRawFactors(client);
         const scores = this.computeScores(rawFactors);
         const calculatedAt = new Date();
-        return this.prisma.scoreSnapshot.createManyAndReturn({
+        return client.scoreSnapshot.createManyAndReturn({
             data: scores.map((s) => ({
                 binId: s.binId,
                 score: s.score,
@@ -111,14 +111,14 @@ let ScoringService = class ScoringService {
             include: { bin: { select: { code: true } } },
         });
     }
-    async recomputeOne(binId) {
-        const rawFactors = await this.collectRawFactors();
+    async recomputeOne(binId, client = this.prisma) {
+        const rawFactors = await this.collectRawFactors(client);
         const scores = this.computeScores(rawFactors);
         const target = scores.find((s) => s.binId === binId);
         if (!target) {
             throw new common_1.NotFoundException(`Bin ${binId} not found`);
         }
-        return this.prisma.scoreSnapshot.create({
+        return client.scoreSnapshot.create({
             data: {
                 binId: target.binId,
                 score: target.score,

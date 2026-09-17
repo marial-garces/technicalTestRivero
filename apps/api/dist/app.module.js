@@ -13,12 +13,22 @@ const app_controller_1 = require("./app.controller");
 const app_service_1 = require("./app.service");
 const prisma_module_1 = require("./prisma/prisma.module");
 const scoring_module_1 = require("./scoring/scoring.module");
+const bins_module_1 = require("./bins/bins.module");
+const audit_plans_module_1 = require("./audit-plans/audit-plans.module");
+const audit_tasks_module_1 = require("./audit-tasks/audit-tasks.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
-        imports: [config_1.ConfigModule.forRoot({ isGlobal: true }), prisma_module_1.PrismaModule, scoring_module_1.ScoringModule],
+        imports: [
+            config_1.ConfigModule.forRoot({ isGlobal: true }),
+            prisma_module_1.PrismaModule,
+            scoring_module_1.ScoringModule,
+            bins_module_1.BinsModule,
+            audit_plans_module_1.AuditPlansModule,
+            audit_tasks_module_1.AuditTasksModule,
+        ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],
     })

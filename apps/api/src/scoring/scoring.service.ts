@@ -36,6 +36,9 @@ interface BinScore {
   breakdown: ScoreBreakdown;
 }
 
+/** Any client capable of running the scoring queries: the app-wide PrismaService, or a `$transaction` callback client. */
+type QueryClient = PrismaService | Prisma.TransactionClient;
+
 @Injectable()
 export class ScoringService {
   constructor(private readonly prisma: PrismaService) {}
@@ -44,12 +47,12 @@ export class ScoringService {
    * Collects the three raw scoring factors for every bin in the warehouse.
    * daysSinceAudit uses a 999-day sentinel for bins that have never been audited.
    */
-  private async collectRawFactors(): Promise<RawFactors[]> {
-    const bins = await this.prisma.bin.findMany({
+  private async collectRawFactors(client: QueryClient): Promise<RawFactors[]> {
+    const bins = await client.bin.findMany({
       select: { id: true, lastAuditedAt: true },
     });
 
-    const movementCounts = await this.prisma.movement.groupBy({
+    const movementCounts = await client.movement.groupBy({
       by: ['binId', 'type'],
       _count: { _all: true },
     });
@@ -137,13 +140,16 @@ export class ScoringService {
   /**
    * Recalculates raw factors + min/max across all bins and persists a new
    * ScoreSnapshot for every bin.
+   *
+   * `client` defaults to the app-wide PrismaService, but a `$transaction`
+   * callback client can be passed to run this as part of a larger transaction.
    */
-  async recomputeAll() {
-    const rawFactors = await this.collectRawFactors();
+  async recomputeAll(client: QueryClient = this.prisma) {
+    const rawFactors = await this.collectRawFactors(client);
     const scores = this.computeScores(rawFactors);
     const calculatedAt = new Date();
 
-    return this.prisma.scoreSnapshot.createManyAndReturn({
+    return client.scoreSnapshot.createManyAndReturn({
       data: scores.map((s) => ({
         binId: s.binId,
         score: s.score,
@@ -158,9 +164,13 @@ export class ScoringService {
    * Recalculates raw factors + min/max across ALL bins (so normalization
    * uses the correct global reference, see DESIGN.md decision #13), but only
    * persists a new ScoreSnapshot for the requested bin.
+   *
+   * `client` defaults to the app-wide PrismaService, but a `$transaction`
+   * callback client can be passed to run this as part of a larger transaction
+   * (e.g. the audit-task count flow).
    */
-  async recomputeOne(binId: string) {
-    const rawFactors = await this.collectRawFactors();
+  async recomputeOne(binId: string, client: QueryClient = this.prisma) {
+    const rawFactors = await this.collectRawFactors(client);
     const scores = this.computeScores(rawFactors);
     const target = scores.find((s) => s.binId === binId);
 
@@ -168,7 +178,7 @@ export class ScoringService {
       throw new NotFoundException(`Bin ${binId} not found`);
     }
 
-    return this.prisma.scoreSnapshot.create({
+    return client.scoreSnapshot.create({
       data: {
         binId: target.binId,
         score: target.score,

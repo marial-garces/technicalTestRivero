@@ -1,11 +1,13 @@
 import { PrismaService } from '../prisma/prisma.service';
+import { Prisma } from '../generated/prisma/client';
+type QueryClient = PrismaService | Prisma.TransactionClient;
 export declare class ScoringService {
     private readonly prisma;
     constructor(prisma: PrismaService);
     private collectRawFactors;
     private normalize;
     private computeScores;
-    recomputeAll(): Promise<({
+    recomputeAll(client?: QueryClient): Promise<({
         bin: {
             code: string;
         };
@@ -16,7 +18,7 @@ export declare class ScoringService {
         breakdown: import("@prisma/client/runtime/library").JsonValue;
         calculatedAt: Date;
     })[]>;
-    recomputeOne(binId: string): Promise<{
+    recomputeOne(binId: string, client?: QueryClient): Promise<{
         bin: {
             code: string;
         };
@@ -28,3 +30,4 @@ export declare class ScoringService {
         calculatedAt: Date;
     }>;
 }
+export {};

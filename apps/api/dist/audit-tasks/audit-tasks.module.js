@@ -6,18 +6,19 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ScoringModule = void 0;
+exports.AuditTasksModule = void 0;
 const common_1 = require("@nestjs/common");
-const scoring_controller_1 = require("./scoring.controller");
-const scoring_service_1 = require("./scoring.service");
-let ScoringModule = class ScoringModule {
+const audit_tasks_controller_1 = require("./audit-tasks.controller");
+const audit_tasks_service_1 = require("./audit-tasks.service");
+const scoring_module_1 = require("../scoring/scoring.module");
+let AuditTasksModule = class AuditTasksModule {
 };
-exports.ScoringModule = ScoringModule;
-exports.ScoringModule = ScoringModule = __decorate([
+exports.AuditTasksModule = AuditTasksModule;
+exports.AuditTasksModule = AuditTasksModule = __decorate([
     (0, common_1.Module)({
-        controllers: [scoring_controller_1.ScoringController],
-        providers: [scoring_service_1.ScoringService],
-        exports: [scoring_service_1.ScoringService],
+        imports: [scoring_module_1.ScoringModule],
+        controllers: [audit_tasks_controller_1.AuditTasksController],
+        providers: [audit_tasks_service_1.AuditTasksService],
     })
-], ScoringModule);
-//# sourceMappingURL=scoring.module.js.map
+], AuditTasksModule);
+//# sourceMappingURL=audit-tasks.module.js.map
