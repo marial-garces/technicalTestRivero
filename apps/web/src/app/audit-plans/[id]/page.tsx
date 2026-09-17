@@ -1,26 +1,12 @@
 import Link from "next/link";
+import { api, type AuditTask } from "@/lib/api";
+import { riskLevel, RISK_BG } from "@/lib/risk";
+import { shortId } from "@/lib/format";
 
-type RiskLevel = "low" | "medium" | "high";
-
-const RISK_STYLES: Record<RiskLevel, string> = {
-  low: "bg-risk-low",
-  medium: "bg-risk-medium",
-  high: "bg-risk-high",
-};
-
-const STATUS_STYLES: Record<string, string> = {
+const STATUS_STYLES: Record<AuditTask["status"], string> = {
   DONE: "bg-risk-low/20 text-warm-900",
   PENDING: "bg-warm-100 text-warm-600",
 };
-
-// Placeholder data only — real tasks for this plan arrive via fetch in a later phase.
-const PLACEHOLDER_TASKS = [
-  { id: "task-1", binCode: "A1-R2-B03", risk: "high" as RiskLevel, score: 76, status: "DONE" },
-  { id: "task-2", binCode: "A5-R5-B01", risk: "high" as RiskLevel, score: 71, status: "DONE" },
-  { id: "task-3", binCode: "A5-R3-B01", risk: "high" as RiskLevel, score: 69, status: "PENDING" },
-  { id: "task-4", binCode: "A1-R5-B01", risk: "high" as RiskLevel, score: 68, status: "PENDING" },
-  { id: "task-5", binCode: "A1-R1-B01", risk: "high" as RiskLevel, score: 67, status: "PENDING" },
-];
 
 export default async function AuditPlanDetailPage({
   params,
@@ -28,8 +14,17 @@ export default async function AuditPlanDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const pending = PLACEHOLDER_TASKS.filter((t) => t.status === "PENDING").length;
-  const done = PLACEHOLDER_TASKS.filter((t) => t.status === "DONE").length;
+
+  let tasks: AuditTask[] | null = null;
+  let loadError: string | null = null;
+  try {
+    tasks = await api.getAuditPlanTasks(id);
+  } catch {
+    loadError = "No se pudo cargar este plan.";
+  }
+
+  const pending = tasks?.filter((t) => t.status === "PENDING").length ?? 0;
+  const done = tasks?.filter((t) => t.status === "DONE").length ?? 0;
 
   return (
     <div className="flex flex-col gap-6">
@@ -40,40 +35,47 @@ export default async function AuditPlanDetailPage({
         >
           ← Audit Plans
         </Link>
-        <h1 className="mt-2 text-2xl font-bold text-warm-900 sm:text-3xl">
-          Plan {id}
+        <h1 className="mt-2 text-2xl font-bold text-warm-900 sm:text-3xl" title={id}>
+          Plan plan-{shortId(id)}
         </h1>
-        <p className="mt-1 text-sm text-warm-600">
-          Top {PLACEHOLDER_TASKS.length} bins · {pending} pending · {done} done
-        </p>
+        {tasks && (
+          <p className="mt-1 text-sm text-warm-600">
+            Top {tasks.length} bins · {pending} pending · {done} done
+          </p>
+        )}
       </div>
 
+      {loadError && <p className="text-sm text-risk-high">{loadError}</p>}
+
       <ul className="flex flex-col gap-3">
-        {PLACEHOLDER_TASKS.map((task) => (
+        {tasks?.map((task) => (
           <li
             key={task.id}
-            className="flex items-center justify-between gap-4 rounded-xl border border-warm-200 bg-warm-50 p-4"
+            className="flex flex-col gap-3 rounded-xl border border-warm-200 bg-warm-50 p-4 sm:flex-row sm:items-center sm:justify-between"
           >
             <div className="flex items-center gap-3">
               <span
-                className={`h-9 w-9 shrink-0 rounded-lg ${RISK_STYLES[task.risk]}`}
+                className={`h-9 w-9 shrink-0 rounded-lg ${RISK_BG[riskLevel(task.bin.score)]}`}
               />
               <span className="font-mono text-sm font-semibold text-warm-900">
-                {task.binCode}
+                {task.bin.code}
               </span>
             </div>
             <div className="flex items-center gap-3">
               <span className="font-mono text-sm text-warm-500">
-                score {task.score}
+                score {task.bin.score !== null ? Math.round(task.bin.score) : "—"}
               </span>
               <span
                 className={`rounded-full px-2.5 py-1 text-xs font-semibold ${STATUS_STYLES[task.status]}`}
               >
                 {task.status}
               </span>
-              <button className="whitespace-nowrap rounded-lg border border-warm-300 bg-warm-50 px-3 py-1.5 text-sm font-medium text-warm-900 transition hover:bg-warm-100">
+              <Link
+                href={`/count?taskId=${task.id}`}
+                className="whitespace-nowrap rounded-lg border border-warm-300 bg-warm-50 px-3 py-1.5 text-sm font-medium text-warm-900 transition hover:bg-warm-100"
+              >
                 {task.status === "DONE" ? "Ver conteo" : "Contar"}
-              </button>
+              </Link>
             </div>
           </li>
         ))}

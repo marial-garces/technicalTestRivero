@@ -16,6 +16,7 @@ const scoring_module_1 = require("./scoring/scoring.module");
 const bins_module_1 = require("./bins/bins.module");
 const audit_plans_module_1 = require("./audit-plans/audit-plans.module");
 const audit_tasks_module_1 = require("./audit-tasks/audit-tasks.module");
+const warehouses_module_1 = require("./warehouses/warehouses.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -28,6 +29,7 @@ exports.AppModule = AppModule = __decorate([
             bins_module_1.BinsModule,
             audit_plans_module_1.AuditPlansModule,
             audit_tasks_module_1.AuditTasksModule,
+            warehouses_module_1.WarehousesModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],

@@ -20,10 +20,18 @@ let AuditTasksService = class AuditTasksService {
         this.scoringService = scoringService;
     }
     async findAll(status) {
-        return this.prisma.auditTask.findMany({
+        const tasks = await this.prisma.auditTask.findMany({
             where: status ? { status } : undefined,
-            include: { bin: true },
+            include: {
+                bin: {
+                    include: { scoreSnapshots: { orderBy: { calculatedAt: 'desc' }, take: 1 } },
+                },
+            },
             orderBy: { createdAt: 'desc' },
+        });
+        return tasks.map((task) => {
+            const { scoreSnapshots, ...bin } = task.bin;
+            return { ...task, bin: { ...bin, score: scoreSnapshots[0]?.score ?? null } };
         });
     }
     async findOne(id) {
@@ -31,14 +39,18 @@ let AuditTasksService = class AuditTasksService {
             where: { id },
             include: {
                 bin: {
-                    include: { pallets: { include: { product: true } } },
+                    include: {
+                        pallets: { include: { product: true } },
+                        scoreSnapshots: { orderBy: { calculatedAt: 'desc' }, take: 1 },
+                    },
                 },
             },
         });
         if (!task) {
             throw new common_1.NotFoundException(`AuditTask ${id} not found`);
         }
-        return task;
+        const { scoreSnapshots, ...bin } = task.bin;
+        return { ...task, bin: { ...bin, score: scoreSnapshots[0]?.score ?? null } };
     }
     async count(id, countedQuantity) {
         const task = await this.prisma.auditTask.findUnique({ where: { id } });

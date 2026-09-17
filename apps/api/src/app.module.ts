@@ -7,6 +7,7 @@ import { ScoringModule } from './scoring/scoring.module';
 import { BinsModule } from './bins/bins.module';
 import { AuditPlansModule } from './audit-plans/audit-plans.module';
 import { AuditTasksModule } from './audit-tasks/audit-tasks.module';
+import { WarehousesModule } from './warehouses/warehouses.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { AuditTasksModule } from './audit-tasks/audit-tasks.module';
     BinsModule,
     AuditPlansModule,
     AuditTasksModule,
+    WarehousesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

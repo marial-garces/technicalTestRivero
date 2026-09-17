@@ -69,10 +69,19 @@ export class AuditPlansService {
       throw new NotFoundException(`AuditPlan ${planId} not found`);
     }
 
-    return this.prisma.auditTask.findMany({
+    const tasks = await this.prisma.auditTask.findMany({
       where: { auditPlanId: planId },
-      include: { bin: true },
+      include: {
+        bin: {
+          include: { scoreSnapshots: { orderBy: { calculatedAt: 'desc' }, take: 1 } },
+        },
+      },
       orderBy: { createdAt: 'asc' },
+    });
+
+    return tasks.map((task) => {
+      const { scoreSnapshots, ...bin } = task.bin;
+      return { ...task, bin: { ...bin, score: scoreSnapshots[0]?.score ?? null } };
     });
   }
 }

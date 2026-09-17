@@ -11,10 +11,19 @@ export class AuditTasksService {
   ) {}
 
   async findAll(status?: TaskStatus) {
-    return this.prisma.auditTask.findMany({
+    const tasks = await this.prisma.auditTask.findMany({
       where: status ? { status } : undefined,
-      include: { bin: true },
+      include: {
+        bin: {
+          include: { scoreSnapshots: { orderBy: { calculatedAt: 'desc' }, take: 1 } },
+        },
+      },
       orderBy: { createdAt: 'desc' },
+    });
+
+    return tasks.map((task) => {
+      const { scoreSnapshots, ...bin } = task.bin;
+      return { ...task, bin: { ...bin, score: scoreSnapshots[0]?.score ?? null } };
     });
   }
 
@@ -23,7 +32,10 @@ export class AuditTasksService {
       where: { id },
       include: {
         bin: {
-          include: { pallets: { include: { product: true } } },
+          include: {
+            pallets: { include: { product: true } },
+            scoreSnapshots: { orderBy: { calculatedAt: 'desc' }, take: 1 },
+          },
         },
       },
     });
@@ -32,7 +44,8 @@ export class AuditTasksService {
       throw new NotFoundException(`AuditTask ${id} not found`);
     }
 
-    return task;
+    const { scoreSnapshots, ...bin } = task.bin;
+    return { ...task, bin: { ...bin, score: scoreSnapshots[0]?.score ?? null } };
   }
 
   /**

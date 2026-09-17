@@ -3,15 +3,15 @@ import { TaskStatus } from '../generated/prisma/client';
 export declare class AuditTasksController {
     private readonly auditTasksService;
     constructor(auditTasksService: AuditTasksService);
-    findAll(status?: string): Promise<({
+    findAll(status?: string): Promise<{
         bin: {
+            score: number;
             id: string;
             rackId: string;
             code: string;
             lastAuditedAt: Date | null;
             createdAt: Date;
         };
-    } & {
         id: string;
         createdAt: Date;
         binId: string;
@@ -21,9 +21,10 @@ export declare class AuditTasksController {
         countedQuantity: number | null;
         passed: boolean | null;
         countedAt: Date | null;
-    })[]>;
+    }[]>;
     findOne(id: string): Promise<{
         bin: {
+            score: number;
             pallets: ({
                 product: {
                     id: string;
@@ -37,14 +38,12 @@ export declare class AuditTasksController {
                 quantity: number;
                 productId: string;
             })[];
-        } & {
             id: string;
             rackId: string;
             code: string;
             lastAuditedAt: Date | null;
             createdAt: Date;
         };
-    } & {
         id: string;
         createdAt: Date;
         binId: string;

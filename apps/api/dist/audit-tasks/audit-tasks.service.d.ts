@@ -5,15 +5,15 @@ export declare class AuditTasksService {
     private readonly prisma;
     private readonly scoringService;
     constructor(prisma: PrismaService, scoringService: ScoringService);
-    findAll(status?: TaskStatus): Promise<({
+    findAll(status?: TaskStatus): Promise<{
         bin: {
+            score: number;
             id: string;
             rackId: string;
             code: string;
             lastAuditedAt: Date | null;
             createdAt: Date;
         };
-    } & {
         id: string;
         createdAt: Date;
         binId: string;
@@ -23,9 +23,10 @@ export declare class AuditTasksService {
         countedQuantity: number | null;
         passed: boolean | null;
         countedAt: Date | null;
-    })[]>;
+    }[]>;
     findOne(id: string): Promise<{
         bin: {
+            score: number;
             pallets: ({
                 product: {
                     id: string;
@@ -39,14 +40,12 @@ export declare class AuditTasksService {
                 quantity: number;
                 productId: string;
             })[];
-        } & {
             id: string;
             rackId: string;
             code: string;
             lastAuditedAt: Date | null;
             createdAt: Date;
         };
-    } & {
         id: string;
         createdAt: Date;
         binId: string;

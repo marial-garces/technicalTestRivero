@@ -35,15 +35,15 @@ export declare class AuditPlansService {
         createdAt: Date;
         topN: number;
     }[]>;
-    findTasks(planId: string): Promise<({
+    findTasks(planId: string): Promise<{
         bin: {
+            score: number;
             id: string;
             rackId: string;
             code: string;
             lastAuditedAt: Date | null;
             createdAt: Date;
         };
-    } & {
         id: string;
         createdAt: Date;
         binId: string;
@@ -53,5 +53,5 @@ export declare class AuditPlansService {
         countedQuantity: number | null;
         passed: boolean | null;
         countedAt: Date | null;
-    })[]>;
+    }[]>;
 }
