@@ -19,7 +19,7 @@ export default function AuditPlansPage() {
     api
       .getAuditPlans()
       .then(setPlans)
-      .catch(() => setLoadError("No se pudieron cargar los planes."));
+      .catch(() => setLoadError("Could not load the plans."));
   }, []);
 
   async function handleGenerate() {
@@ -29,7 +29,7 @@ export default function AuditPlansPage() {
       const plan = await api.createAuditPlan(topN);
       router.push(`/audit-plans/${plan.id}`);
     } catch {
-      setGenerateError("No se pudo crear el plan.");
+      setGenerateError("Could not create the plan.");
     } finally {
       setGenerating(false);
     }
@@ -40,14 +40,14 @@ export default function AuditPlansPage() {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <p className="font-mono text-xs uppercase tracking-widest text-warm-500">
-            Planes
+            Audit Plans
           </p>
           <h1 className="mt-1 text-2xl font-bold text-warm-900 sm:text-3xl">
             Audit Plans
           </h1>
           <p className="mt-2 max-w-xl text-sm text-warm-600">
-            Cada plan agrupa los top N bins con mayor score en tasks
-            pendientes de conteo.
+            Each plan groups the top N bins by score into pending count
+            tasks.
           </p>
         </div>
 
@@ -68,7 +68,7 @@ export default function AuditPlansPage() {
               disabled={generating}
               className="whitespace-nowrap rounded-lg bg-warm-900 px-4 py-2 text-sm font-medium text-warm-50 transition hover:bg-warm-800 disabled:cursor-not-allowed disabled:opacity-60"
             >
-              {generating ? "Generando…" : "Generate Audit Plan"}
+              {generating ? "Generating…" : "Generate Audit Plan"}
             </button>
           </div>
           {generateError && (
@@ -79,10 +79,10 @@ export default function AuditPlansPage() {
 
       {loadError && <p className="text-sm text-risk-high">{loadError}</p>}
       {plans === null && !loadError && (
-        <p className="text-sm text-warm-500">Cargando planes…</p>
+        <p className="text-sm text-warm-500">Loading plans…</p>
       )}
       {plans?.length === 0 && (
-        <p className="text-sm text-warm-500">Todavía no hay planes.</p>
+        <p className="text-sm text-warm-500">No plans yet.</p>
       )}
 
       <ul className="flex flex-col gap-3">
@@ -108,7 +108,7 @@ export default function AuditPlansPage() {
                     </span>
                   </div>
                   <p className="mt-1 text-xs text-warm-500">
-                    Creado {formatRelativeTime(plan.createdAt)}
+                    Created {formatRelativeTime(plan.createdAt)}
                   </p>
                 </div>
 
@@ -133,7 +133,7 @@ export default function AuditPlansPage() {
                     href={`/audit-plans/${plan.id}`}
                     className="whitespace-nowrap text-sm font-medium text-warm-700 transition hover:text-warm-900"
                   >
-                    Ver tasks →
+                    View tasks →
                   </Link>
                 </div>
               </div>

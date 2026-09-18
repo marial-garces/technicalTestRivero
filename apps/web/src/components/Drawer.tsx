@@ -32,7 +32,7 @@ export function Drawer({ open, onClose, title, children }: DrawerProps) {
     <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-stretch sm:justify-end">
       {/* Backdrop */}
       <button
-        aria-label="Cerrar"
+        aria-label="Close"
         onClick={onClose}
         className="absolute inset-0 bg-warm-900/40 backdrop-blur-[1px]"
       />
@@ -53,7 +53,7 @@ export function Drawer({ open, onClose, title, children }: DrawerProps) {
           )}
           <button
             onClick={onClose}
-            aria-label="Cerrar"
+            aria-label="Close"
             className="rounded-full px-2 py-1 text-warm-500 transition hover:bg-warm-100 hover:text-warm-900"
           >
             ✕

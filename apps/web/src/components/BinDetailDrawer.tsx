@@ -13,9 +13,9 @@ interface BinDetailDrawerProps {
 }
 
 const FACTOR_LABELS: Record<keyof ScoreBreakdown, string> = {
-  adjustments: "Ajustes",
-  daysSinceAudit: "Días desde auditoría",
-  movements: "Movimientos",
+  adjustments: "Adjustments",
+  daysSinceAudit: "Days since audit",
+  movements: "Movements",
 };
 
 export function BinDetailDrawer({
@@ -41,7 +41,7 @@ export function BinDetailDrawer({
         if (!cancelled) setBin(data);
       })
       .catch(() => {
-        if (!cancelled) setError("No se pudo cargar el bin.");
+        if (!cancelled) setError("Could not load the bin.");
       })
       .finally(() => {
         if (!cancelled) setLoading(false);
@@ -53,28 +53,28 @@ export function BinDetailDrawer({
 
   return (
     <Drawer open={binId !== null} onClose={onClose} title={bin?.code}>
-      {loading && <p className="text-sm text-warm-500">Cargando…</p>}
+      {loading && <p className="text-sm text-warm-500">Loading…</p>}
       {error && <p className="text-sm text-risk-high">{error}</p>}
 
       {bin && !loading && (
         <div className="flex flex-col gap-6">
           <div>
             <p className="font-mono text-xs uppercase tracking-widest text-warm-500">
-              Score actual
+              Current score
             </p>
             <p className="mt-1 font-mono text-4xl font-bold text-warm-900">
               {bin.score !== null ? Math.round(bin.score) : "—"}
               <span className="text-base font-normal text-warm-400">/100</span>
             </p>
             <p className="mt-1 text-xs text-warm-500">
-              Última auditoría: {formatDate(bin.lastAuditedAt)}
+              Last audit: {formatDate(bin.lastAuditedAt)}
             </p>
           </div>
 
           {bin.breakdown && (
             <div>
               <p className="mb-2 text-sm font-medium text-warm-700">
-                Por qué este score
+                Why this score
               </p>
               <div className="flex flex-col gap-2">
                 {(
@@ -91,7 +91,7 @@ export function BinDetailDrawer({
                           {FACTOR_LABELS[key]}
                         </span>
                         <span className="font-mono text-xs text-warm-500">
-                          peso {Math.round(factor.weight * 100)}%
+                          weight {Math.round(factor.weight * 100)}%
                         </span>
                       </div>
                       <div className="mt-1 flex items-center justify-between font-mono text-xs text-warm-500">
@@ -113,10 +113,10 @@ export function BinDetailDrawer({
 
           <div>
             <p className="mb-2 text-sm font-medium text-warm-700">
-              Pallets actuales ({bin.pallets.length})
+              Current pallets ({bin.pallets.length})
             </p>
             {bin.pallets.length === 0 ? (
-              <p className="text-sm text-warm-500">Este bin está vacío.</p>
+              <p className="text-sm text-warm-500">This bin is empty.</p>
             ) : (
               <ul className="flex flex-col gap-2">
                 {bin.pallets.map((pallet) => (
@@ -128,7 +128,7 @@ export function BinDetailDrawer({
                       {pallet.product.name}
                     </span>
                     <span className="font-mono text-warm-500">
-                      {pallet.quantity} u.
+                      {pallet.quantity} units
                     </span>
                   </li>
                 ))}

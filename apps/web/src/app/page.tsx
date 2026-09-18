@@ -8,9 +8,9 @@ import { api, type Heatmap, type HeatmapBin } from "@/lib/api";
 import { riskLevel, RISK_BG } from "@/lib/risk";
 
 const RISK_LEGEND = [
-  { level: "low", label: "Riesgo bajo", range: "0-39" },
-  { level: "medium", label: "Riesgo medio", range: "40-64" },
-  { level: "high", label: "Riesgo alto", range: "65-100" },
+  { level: "low", label: "Low Risk", range: "0-39" },
+  { level: "medium", label: "Medium Risk", range: "40-64" },
+  { level: "high", label: "High Risk", range: "65-100" },
 ] as const;
 
 function allBins(heatmap: Heatmap): HeatmapBin[] {
@@ -46,7 +46,7 @@ export default function HeatmapPage() {
         if (!cancelled) setHeatmap(data);
       } catch {
         if (!cancelled) {
-          setLoadError("No se pudo cargar el heatmap. ¿Está la API corriendo?");
+          setLoadError("Could not load the heatmap. Is the API running?");
         }
       } finally {
         if (!cancelled) setLoading(false);
@@ -87,7 +87,7 @@ export default function HeatmapPage() {
       const plan = await api.createAuditPlan(topN);
       router.push(`/audit-plans/${plan.id}`);
     } catch {
-      setGenerateError("No se pudo crear el plan.");
+      setGenerateError("Could not create the plan.");
     } finally {
       setGenerating(false);
     }
@@ -101,11 +101,11 @@ export default function HeatmapPage() {
             Dashboard
           </p>
           <h1 className="mt-1 text-2xl font-bold text-warm-900 sm:text-3xl">
-            Heatmap del almacén
+            Warehouse Heatmap
           </h1>
           <p className="mt-2 max-w-xl text-sm text-warm-600">
-            Los bins con mayor riesgo de discrepancia aparecen en terracota.
-            Toca un bin para ver su score y por qué lo tiene.
+            Bins with a higher risk of discrepancy show up in terracotta.
+            Tap a bin to see its score and why it has it.
           </p>
         </div>
 
@@ -126,7 +126,7 @@ export default function HeatmapPage() {
               disabled={generating}
               className="whitespace-nowrap rounded-lg bg-warm-900 px-4 py-2 text-sm font-medium text-warm-50 transition hover:bg-warm-800 disabled:cursor-not-allowed disabled:opacity-60"
             >
-              {generating ? "Generando…" : "Generate Audit Plan"}
+              {generating ? "Generating…" : "Generate Audit Plan"}
             </button>
           </div>
           {generateError && (
@@ -151,7 +151,7 @@ export default function HeatmapPage() {
         ))}
       </div>
 
-      {loading && <p className="text-sm text-warm-500">Cargando heatmap…</p>}
+      {loading && <p className="text-sm text-warm-500">Loading heatmap…</p>}
       {loadError && <p className="text-sm text-risk-high">{loadError}</p>}
 
       {heatmap && !loading && (

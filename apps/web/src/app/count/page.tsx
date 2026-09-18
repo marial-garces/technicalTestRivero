@@ -75,7 +75,7 @@ function CountFlow() {
       setCountedQuantity("");
       setSubmitError(null);
     } catch {
-      setSelectError("No se pudo cargar la task.");
+      setSelectError("Could not load the task.");
     } finally {
       setSelecting(false);
     }
@@ -85,7 +85,7 @@ function CountFlow() {
     const match = pendingTasks?.find((t) => t.binId === bin.id);
     if (!match) {
       setSelectedTask(null);
-      setSelectError(`El bin ${bin.code} no tiene una task pendiente.`);
+      setSelectError(`Bin ${bin.code} doesn't have a pending task.`);
       return;
     }
     selectTaskById(match.id);
@@ -103,7 +103,7 @@ function CountFlow() {
     if (!selectedTask) return;
     const qty = Number(countedQuantity);
     if (!Number.isFinite(qty) || qty < 0) {
-      setSubmitError("Ingresá una cantidad válida.");
+      setSubmitError("Enter a valid quantity.");
       return;
     }
     setSubmitting(true);
@@ -125,7 +125,7 @@ function CountFlow() {
       );
       setPendingTasks((prev) => prev?.filter((t) => t.id !== selectedTask.id) ?? prev);
     } catch {
-      setSubmitError("No se pudo registrar el conteo.");
+      setSubmitError("Could not record the count.");
     } finally {
       setSubmitting(false);
     }
@@ -141,23 +141,23 @@ function CountFlow() {
           Count flow
         </p>
         <h1 className="mt-1 text-2xl font-bold text-warm-900 sm:text-3xl">
-          Registrar conteo
+          Record Count
         </h1>
         <p className="mt-2 text-sm text-warm-600">
-          Busca el bin por código, ingresa la cantidad contada y envía. El
-          resultado pass/fail se calcula automáticamente.
+          Search for the bin by code, enter the counted quantity, and submit.
+          The pass/fail result is calculated automatically.
         </p>
       </div>
 
       {!selectedTask && (
         <>
           <label className="flex flex-col gap-1.5 text-sm text-warm-700">
-            Buscar bin por código
+            Search bin by code
             <input
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Ej. A2-R2-B04"
+              placeholder="E.g. A2-R2-B04"
               className="rounded-lg border border-warm-200 bg-warm-50 px-3 py-2.5 font-mono text-warm-900 placeholder:text-warm-400"
             />
           </label>
@@ -166,9 +166,9 @@ function CountFlow() {
 
           {query.trim() && (
             <div className="flex flex-col gap-2">
-              {searching && <p className="text-sm text-warm-500">Buscando…</p>}
+              {searching && <p className="text-sm text-warm-500">Searching…</p>}
               {!searching && searchResults?.length === 0 && (
-                <p className="text-sm text-warm-500">Sin resultados.</p>
+                <p className="text-sm text-warm-500">No results.</p>
               )}
               {searchResults?.map((bin) => (
                 <button
@@ -181,8 +181,8 @@ function CountFlow() {
                   </span>
                   <span className="text-xs text-warm-500">
                     {pendingTasks?.some((t) => t.binId === bin.id)
-                      ? "task pendiente"
-                      : "sin task pendiente"}
+                      ? "pending task"
+                      : "no pending task"}
                   </span>
                 </button>
               ))}
@@ -192,11 +192,11 @@ function CountFlow() {
           {!query.trim() && (
             <ul className="flex flex-col gap-3">
               {pendingTasks === null && (
-                <p className="text-sm text-warm-500">Cargando tasks pendientes…</p>
+                <p className="text-sm text-warm-500">Loading pending tasks…</p>
               )}
               {pendingTasks?.length === 0 && (
                 <p className="text-sm text-warm-500">
-                  No hay tasks pendientes en este momento.
+                  No pending tasks right now.
                 </p>
               )}
               {pendingTasks?.map((task) => (
@@ -214,8 +214,8 @@ function CountFlow() {
                       </span>
                     </div>
                     <span className="text-xs text-warm-500">
-                      score {task.bin.score !== null ? Math.round(task.bin.score) : "—"} · task
-                      pendiente
+                      score {task.bin.score !== null ? Math.round(task.bin.score) : "—"} ·
+                      pending task
                     </span>
                   </button>
                 </li>
@@ -225,7 +225,7 @@ function CountFlow() {
         </>
       )}
 
-      {selecting && <p className="text-sm text-warm-500">Cargando…</p>}
+      {selecting && <p className="text-sm text-warm-500">Loading…</p>}
 
       {selectedTask && (
         <div className="flex flex-col gap-4">
@@ -233,7 +233,7 @@ function CountFlow() {
             onClick={reset}
             className="self-start text-sm text-warm-600 transition hover:text-warm-900"
           >
-            ← Buscar otro bin
+            ← Search another bin
           </button>
 
           <div className="rounded-xl border border-warm-200 bg-warm-50 p-4">
@@ -246,17 +246,17 @@ function CountFlow() {
                   {selectedTask.bin.code}
                 </p>
                 <p className="text-xs text-warm-500">
-                  score {selectedTask.bin.score !== null ? Math.round(selectedTask.bin.score) : "—"} · última auditoría: {formatDate(selectedTask.bin.lastAuditedAt)}
+                  score {selectedTask.bin.score !== null ? Math.round(selectedTask.bin.score) : "—"} · last audit: {formatDate(selectedTask.bin.lastAuditedAt)}
                 </p>
               </div>
             </div>
 
             <div className="mt-4">
               <p className="mb-2 text-sm font-medium text-warm-700">
-                Pallets esperados ({selectedTask.bin.pallets.length})
+                Expected pallets ({selectedTask.bin.pallets.length})
               </p>
               {selectedTask.bin.pallets.length === 0 ? (
-                <p className="text-sm text-warm-500">Este bin está vacío.</p>
+                <p className="text-sm text-warm-500">This bin is empty.</p>
               ) : (
                 <ul className="flex flex-col gap-1.5">
                   {selectedTask.bin.pallets.map((pallet) => (
@@ -266,14 +266,14 @@ function CountFlow() {
                     >
                       <span className="text-warm-900">{pallet.product.name}</span>
                       <span className="font-mono text-warm-500">
-                        {pallet.quantity} u.
+                        {pallet.quantity} units
                       </span>
                     </li>
                   ))}
                 </ul>
               )}
               <p className="mt-2 border-t border-warm-200 pt-2 text-sm font-medium text-warm-900">
-                Cantidad esperada: {expectedFromPallets} u.
+                Expected quantity: {expectedFromPallets} units
               </p>
             </div>
           </div>
@@ -281,7 +281,7 @@ function CountFlow() {
           {selectedTask.status === "PENDING" ? (
             <div className="flex flex-col gap-3">
               <label className="flex flex-col gap-1.5 text-sm text-warm-700">
-                Cantidad contada
+                Counted quantity
                 <input
                   type="number"
                   min={0}
@@ -298,7 +298,7 @@ function CountFlow() {
                 disabled={submitting || countedQuantity === ""}
                 className="whitespace-nowrap rounded-lg bg-warm-900 px-4 py-2 text-sm font-medium text-warm-50 transition hover:bg-warm-800 disabled:cursor-not-allowed disabled:opacity-60"
               >
-                {submitting ? "Enviando…" : "Enviar conteo"}
+                {submitting ? "Submitting…" : "Submit count"}
               </button>
             </div>
           ) : (
@@ -311,15 +311,15 @@ function CountFlow() {
                 }`}
               >
                 {selectedTask.passed
-                  ? "PASS — el conteo coincide con lo esperado."
-                  : "FAIL — hubo una discrepancia; se registró un ajuste."}
+                  ? "PASS — the count matches what was expected."
+                  : "FAIL — there was a discrepancy; an adjustment was recorded."}
               </div>
               <p className="text-sm text-warm-600">
-                Esperado: {selectedTask.expectedQuantity} u. · Contado:{" "}
-                {selectedTask.countedQuantity} u.
+                Expected: {selectedTask.expectedQuantity} units · Counted:{" "}
+                {selectedTask.countedQuantity} units
               </p>
               <p className="text-xs text-warm-500">
-                Contado el {formatDate(selectedTask.countedAt)}
+                Counted on {formatDate(selectedTask.countedAt)}
               </p>
             </div>
           )}
@@ -331,7 +331,7 @@ function CountFlow() {
 
 export default function CountPage() {
   return (
-    <Suspense fallback={<p className="text-sm text-warm-500">Cargando…</p>}>
+    <Suspense fallback={<p className="text-sm text-warm-500">Loading…</p>}>
       <CountFlow />
     </Suspense>
   );

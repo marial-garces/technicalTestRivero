@@ -18,7 +18,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Smart Cycle Count Scoring",
-  description: "Prioriza qué bins auditar primero según su score de riesgo.",
+  description: "Prioritize which bins to audit first based on their risk score.",
 };
 
 async function getWarehouseSummary() {
@@ -52,7 +52,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
                   <p className="text-xs leading-tight text-warm-500">
                     {warehouse
                       ? `${warehouse.name} · ${warehouse.binCount} bins`
-                      : "API no disponible"}
+                      : "API unavailable"}
                   </p>
                 </div>
               </div>

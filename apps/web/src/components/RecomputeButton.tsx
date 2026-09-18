@@ -4,13 +4,13 @@ import { useEffect, useState } from "react";
 import { useScoring } from "./ScoringProvider";
 
 function formatRelative(date: Date | null): string {
-  if (!date) return "sin recompute aún";
+  if (!date) return "not recomputed yet";
   const diffMin = Math.floor((Date.now() - date.getTime()) / 60_000);
-  if (diffMin < 1) return "recompute hace instantes";
-  if (diffMin === 1) return "recompute hace 1 min";
-  if (diffMin < 60) return `recompute hace ${diffMin} min`;
+  if (diffMin < 1) return "recomputed moments ago";
+  if (diffMin === 1) return "recomputed 1 min ago";
+  if (diffMin < 60) return `recomputed ${diffMin} min ago`;
   const diffHr = Math.floor(diffMin / 60);
-  return `recompute hace ${diffHr}h`;
+  return `recomputed ${diffHr}h ago`;
 }
 
 export function RecomputeButton() {
@@ -36,7 +36,7 @@ export function RecomputeButton() {
         <span
           className={`h-1.5 w-1.5 rounded-full bg-risk-low ${recomputing ? "animate-pulse" : ""}`}
         />
-        {recomputing ? "Recomputando…" : "Recompute Scores"}
+        {recomputing ? "Recomputing…" : "Recompute Scores"}
       </button>
     </>
   );

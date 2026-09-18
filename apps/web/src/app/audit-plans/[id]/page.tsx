@@ -20,7 +20,7 @@ export default async function AuditPlanDetailPage({
   try {
     tasks = await api.getAuditPlanTasks(id);
   } catch {
-    loadError = "No se pudo cargar este plan.";
+    loadError = "Could not load this plan.";
   }
 
   const pending = tasks?.filter((t) => t.status === "PENDING").length ?? 0;
@@ -74,7 +74,7 @@ export default async function AuditPlanDetailPage({
                 href={`/count?taskId=${task.id}`}
                 className="whitespace-nowrap rounded-lg border border-warm-300 bg-warm-50 px-3 py-1.5 text-sm font-medium text-warm-900 transition hover:bg-warm-100"
               >
-                {task.status === "DONE" ? "Ver conteo" : "Contar"}
+                {task.status === "DONE" ? "View count" : "Count"}
               </Link>
             </div>
           </li>
