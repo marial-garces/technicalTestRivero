@@ -173,16 +173,10 @@ export default function HeatmapPage() {
                           key={bin.id}
                           onClick={() => setSelectedBinId(bin.id)}
                           title={bin.code}
-                          className={`flex h-20 w-20 flex-col justify-between rounded-xl p-2 text-left transition hover:opacity-90 hover:ring-2 hover:ring-warm-900/20 sm:h-24 sm:w-24 sm:p-3 ${RISK_BG[riskLevel(bin.score)]}`}
+                          className={`flex h-20 w-20 flex-col justify-center rounded-xl p-2 text-left transition hover:opacity-90 hover:ring-2 hover:ring-warm-900/20 sm:h-24 sm:w-24 sm:p-3 ${RISK_BG[riskLevel(bin.score)]}`}
                         >
                           <span className="font-mono text-[10px] font-medium text-warm-900/70">
                             {bin.code}
-                          </span>
-                          <span className="font-mono text-base font-bold text-warm-900 sm:text-lg">
-                            {bin.score !== null ? Math.round(bin.score) : "—"}
-                            <span className="text-[10px] font-normal text-warm-900/50">
-                              /100
-                            </span>
                           </span>
                         </button>
                       ))}
