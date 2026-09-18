@@ -222,6 +222,12 @@ itself.
   risky instead of just skimming numbers on a grid.
 - **Bin detail is a drawer/overlay, not a separate page**, so users keep the
   heatmap's context (and their scroll position) while inspecting a bin.
+- **The heatmap groups bins by aisle → rack**, satisfying the original
+  brief's "simple grid layout per aisle/rack" requirement rather than a flat,
+  unstructured grid.
+- **The Count Flow is responsive/mobile-friendly by design** — it's the
+  screen warehouse staff are expected to use from a phone while walking the
+  floor.
 - **No authentication in this MVP** — out of scope for the requested
   deliverables.
 

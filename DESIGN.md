@@ -140,6 +140,7 @@ synchronously (no queues/websockets needed for this MVP scope).
 ### Warehouse / Heatmap
 | Method | Route | Description |
 |---|---|---|
+| GET | `/warehouses` | List warehouses (used to resolve which warehouse to load) |
 | GET | `/warehouses/:id/heatmap` | Full aisle → rack → bin structure with each bin's latest score |
 
 ### Bin
