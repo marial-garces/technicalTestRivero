@@ -23,20 +23,15 @@
   --font-mono: var(--font-geist-mono), ui-monospace, "SFMono-Regular", monospace;
 }
 
+/*
+ * Fixed light palette — this project intentionally has no dark mode.
+ * Do not reintroduce a `prefers-color-scheme` query or `dark:` variants;
+ * these values are constants, not overridable defaults.
+ */
 :root {
-  --background: var(--color-warm-50);
-  --foreground: var(--color-warm-900);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: var(--color-warm-900);
-    --foreground: var(--color-warm-50);
-  }
-
-  html {
-    color-scheme: dark;
-  }
+  --background: #faf9f5;
+  --foreground: #29241d;
+  color-scheme: only light;
 }
 
 html,
