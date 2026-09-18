@@ -6,10 +6,10 @@ export declare class AuditPlansController {
         auditTasks: ({
             bin: {
                 id: string;
-                rackId: string;
-                code: string;
-                lastAuditedAt: Date | null;
                 createdAt: Date;
+                code: string;
+                rackId: string;
+                lastAuditedAt: Date | null;
             };
         } & {
             id: string;
@@ -38,10 +38,10 @@ export declare class AuditPlansController {
         bin: {
             score: number;
             id: string;
-            rackId: string;
-            code: string;
-            lastAuditedAt: Date | null;
             createdAt: Date;
+            code: string;
+            rackId: string;
+            lastAuditedAt: Date | null;
         };
         id: string;
         createdAt: Date;

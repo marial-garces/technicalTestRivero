@@ -4,10 +4,10 @@ export declare class BinsController {
     constructor(binsService: BinsService);
     search(q: string): Promise<{
         id: string;
-        rackId: string;
-        code: string;
-        lastAuditedAt: Date | null;
         createdAt: Date;
+        code: string;
+        rackId: string;
+        lastAuditedAt: Date | null;
     }[]>;
     findOne(id: string): Promise<{
         score: number;
@@ -22,14 +22,14 @@ export declare class BinsController {
         } & {
             id: string;
             createdAt: Date;
+            productId: string;
             binId: string;
             quantity: number;
-            productId: string;
         })[];
         id: string;
-        rackId: string;
-        code: string;
-        lastAuditedAt: Date | null;
         createdAt: Date;
+        code: string;
+        rackId: string;
+        lastAuditedAt: Date | null;
     }>;
 }

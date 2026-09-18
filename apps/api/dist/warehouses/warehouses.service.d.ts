@@ -5,8 +5,8 @@ export declare class WarehousesService {
     findAll(): Promise<{
         binCount: number;
         id: string;
-        createdAt: Date;
         name: string;
+        createdAt: Date;
     }[]>;
     getHeatmap(warehouseId: string): Promise<{
         id: string;
@@ -22,10 +22,10 @@ export declare class WarehousesService {
                     breakdown: import("@prisma/client/runtime/library").JsonValue;
                     scoreCalculatedAt: Date;
                     id: string;
-                    rackId: string;
-                    code: string;
-                    lastAuditedAt: Date | null;
                     createdAt: Date;
+                    code: string;
+                    rackId: string;
+                    lastAuditedAt: Date | null;
                 }[];
             }[];
         }[];

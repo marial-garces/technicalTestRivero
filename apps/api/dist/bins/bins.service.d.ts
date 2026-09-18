@@ -15,21 +15,21 @@ export declare class BinsService {
         } & {
             id: string;
             createdAt: Date;
+            productId: string;
             binId: string;
             quantity: number;
-            productId: string;
         })[];
         id: string;
-        rackId: string;
-        code: string;
-        lastAuditedAt: Date | null;
         createdAt: Date;
+        code: string;
+        rackId: string;
+        lastAuditedAt: Date | null;
     }>;
     search(q: string): Promise<{
         id: string;
-        rackId: string;
-        code: string;
-        lastAuditedAt: Date | null;
         createdAt: Date;
+        code: string;
+        rackId: string;
+        lastAuditedAt: Date | null;
     }[]>;
 }

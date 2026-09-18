@@ -7,10 +7,10 @@ export declare class AuditTasksController {
         bin: {
             score: number;
             id: string;
-            rackId: string;
-            code: string;
-            lastAuditedAt: Date | null;
             createdAt: Date;
+            code: string;
+            rackId: string;
+            lastAuditedAt: Date | null;
         };
         id: string;
         createdAt: Date;
@@ -34,15 +34,15 @@ export declare class AuditTasksController {
             } & {
                 id: string;
                 createdAt: Date;
+                productId: string;
                 binId: string;
                 quantity: number;
-                productId: string;
             })[];
             id: string;
-            rackId: string;
-            code: string;
-            lastAuditedAt: Date | null;
             createdAt: Date;
+            code: string;
+            rackId: string;
+            lastAuditedAt: Date | null;
         };
         id: string;
         createdAt: Date;
