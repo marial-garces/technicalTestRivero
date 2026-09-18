@@ -135,7 +135,7 @@ function CountFlow() {
     selectedTask?.bin.pallets.reduce((sum, p) => sum + p.quantity, 0) ?? 0;
 
   return (
-    <div className="flex max-w-md flex-col gap-6">
+    <div className="mx-auto flex w-full max-w-md flex-col gap-6">
       <div>
         <p className="font-mono text-xs uppercase tracking-widest text-warm-500">
           Count flow

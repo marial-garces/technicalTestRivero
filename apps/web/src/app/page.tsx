@@ -158,16 +158,16 @@ export default function HeatmapPage() {
         <div className="flex flex-col gap-8">
           {heatmap.aisles.map((aisle) => (
             <div key={aisle.id}>
-              <p className="mb-3 font-mono text-xs uppercase tracking-widest text-warm-500">
+              <p className="mb-3 text-center font-mono text-xs uppercase tracking-widest text-warm-500">
                 Aisle {aisle.code}
               </p>
               <div className="flex flex-col gap-4">
                 {aisle.racks.map((rack) => (
                   <div key={rack.id}>
-                    <p className="mb-2 text-xs text-warm-400">
+                    <p className="mb-2 text-center text-xs text-warm-400">
                       Rack {rack.code}
                     </p>
-                    <div className="flex flex-wrap gap-2 sm:gap-3">
+                    <div className="flex flex-wrap justify-center gap-2 sm:gap-3">
                       {rack.bins.map((bin) => (
                         <button
                           key={bin.id}
