@@ -155,7 +155,7 @@ export default function HeatmapPage() {
       {loadError && <p className="text-sm text-risk-high">{loadError}</p>}
 
       {heatmap && !loading && (
-        <div className="flex flex-col items-center gap-8">
+        <div className="flex flex-col gap-8">
           {heatmap.aisles.map((aisle) => (
             <div key={aisle.id}>
               <p className="mb-3 font-mono text-xs uppercase tracking-widest text-warm-500">
